@@ -11,6 +11,8 @@ public:
   virtual ~BaseAST() = default;
 
   virtual void Dump() const = 0;
+
+  virtual void generate_Koopa_IR() const = 0;
 };
 
 class CompUnitAST : public BaseAST {
@@ -22,6 +24,8 @@ public:
     func_def->Dump();
     std::cout << " }";
   }
+
+  void generate_Koopa_IR() const override { func_def->generate_Koopa_IR(); }
 };
 
 class FuncDefAST : public BaseAST {
@@ -37,6 +41,15 @@ public:
     block->Dump();
     std::cout << " }";
   }
+
+  void generate_Koopa_IR() const override {
+    std::cout << "fun ";
+    std::cout << "@" << ident << "(): ";
+    func_type->generate_Koopa_IR();
+    std::cout << "{\n";
+    block->generate_Koopa_IR();
+    std::cout << " }";
+  }
 };
 
 class FuncTypeAST : public BaseAST {
@@ -46,8 +59,10 @@ public:
   void Dump() const override {
     std::cout << "FuncTypeAST { ";
     std::cout << type;
-    std::cout << " }";
+    std::cout << "}";
   }
+
+  void generate_Koopa_IR() const override { std::cout << "i32 "; }
 };
 
 class BlockAST : public BaseAST {
@@ -57,7 +72,12 @@ public:
   void Dump() const override {
     std::cout << "BlockAST { ";
     stmt->Dump();
-    std::cout << " }";
+    std::cout << "}";
+  }
+
+  void generate_Koopa_IR() const override {
+    std::cout << "%entry: \n";
+    stmt->generate_Koopa_IR();
   }
 };
 class StmtAST : public BaseAST {
@@ -68,5 +88,9 @@ public:
     std::cout << "StmtAST { ";
     std::cout << number;
     std::cout << " }";
+  }
+
+  void generate_Koopa_IR() const override {
+    std::cout << "  ret " << number << "\n";
   }
 };

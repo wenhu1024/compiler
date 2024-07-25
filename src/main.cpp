@@ -36,5 +36,10 @@ int main(int argc, const char *argv[]) {
   // dump AST
   ast->Dump();
   cout << endl;
+
+  // print IR
+  ast->generate_Koopa_IR();
+  cout << endl;
+
   return 0;
 }
