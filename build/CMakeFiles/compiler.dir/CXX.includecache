@@ -88,3 +88,17 @@ string
 ../ast/ast.hpp
 /root/compiler/ast/ast.hpp
 
+/root/compiler/src/main.cpp
+../ast/ast.hpp
+/root/compiler/ast/ast.hpp
+cassert
+-
+cstdio
+-
+iostream
+-
+memory
+-
+string
+-
+
