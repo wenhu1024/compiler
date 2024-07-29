@@ -1,10 +1,12 @@
-#include "../ast/ast.hpp"
 #include <cassert>
 #include <cstdio>
 #include <iostream>
 #include <memory>
+#include <cstring>
 #include <string>
-
+#include <fstream>
+#include <sstream>
+#include "../ast/ast.hpp"
 using namespace std;
 
 // 声明 lexer 的输入, 以及 parser 函数
@@ -37,9 +39,29 @@ int main(int argc, const char *argv[]) {
   ast->Dump();
   cout << endl;
 
-  // print IR
-  ast->generate_Koopa_IR();
-  cout << endl;
 
+  std::ostringstream oss;
+    
+  // 备份标准输出流缓冲区
+  std::streambuf* originalCoutStreamBuf = std::cout.rdbuf();
+    
+  // 将标准输出流缓冲区重定向到 oss
+  std::cout.rdbuf(oss.rdbuf());
+    
+  // 执行输出操作
+  ast->generate_Koopa_IR();
+    
+  // 恢复标准输出流缓冲区
+  std::cout.rdbuf(originalCoutStreamBuf);
+    
+  // 从 oss 获取字符串
+  std::string IR_str = oss.str();
+  const char* IR_cstr = IR_str.c_str();
+  cout<<IR_str<<'\n';
+  if (strcmp(mode, "-koopa")==0){
+    FILE* output_file = fopen(output, "w");
+    fwrite(IR_cstr, sizeof(char), IR_str.size(), output_file);
+    fclose(output_file);
+  }
   return 0;
 }

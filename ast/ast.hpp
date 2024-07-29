@@ -48,7 +48,7 @@ public:
     func_type->generate_Koopa_IR();
     std::cout << "{\n";
     block->generate_Koopa_IR();
-    std::cout << " }";
+    std::cout << "}";
   }
 };
 
